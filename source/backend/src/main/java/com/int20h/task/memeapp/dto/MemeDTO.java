@@ -5,6 +5,9 @@ public class MemeDTO {
     private String image;
     private Double rating;
 
+    public MemeDTO() {
+    }
+
     public MemeDTO(Long id, String image, Double rating) {
         this.id = id;
         this.image = image;

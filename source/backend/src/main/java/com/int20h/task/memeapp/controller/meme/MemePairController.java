@@ -16,6 +16,7 @@ public class MemePairController extends ApiController {
 
     @RequestMapping(value = "/meme/pair")
     public ResponseEntity<MemePairDTO> getMemePair() {
+        // TODO: return memes from DB
         MemeDTO memeOne = aMemeDTO()
                 .setId(1L)
                 .setImage("https://img-9gag-fun.9cache.com/photo/aDx30WN_460s.jpg")
