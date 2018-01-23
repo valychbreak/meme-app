@@ -31,7 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
-				.authorizeRequests().anyRequest().authenticated();
+				.anonymous().authorities("ROLE_ANONYMOUS").and()
+				.authorizeRequests().anyRequest().permitAll();
 		/*http
 				*//*.exceptionHandling().authenticationEntryPoint(new MyAuthenticationEntryPoint())
 				.and()*//*
