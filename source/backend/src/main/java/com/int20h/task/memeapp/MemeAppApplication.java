@@ -11,15 +11,34 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @SpringBootApplication
 public class MemeAppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MemeAppApplication.class, args);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        /*FilterRegistrationBean bean = new FilterRegistrationBean();
+		bean.setOrder(0);
+		return bean;*/
+        return new CorsFilter(source);
     }
 
     @Bean
