@@ -1,9 +1,12 @@
 package com.int20h.task.memeapp.controller.meme;
 
 import com.int20h.task.memeapp.controller.ApiController;
+import com.int20h.task.memeapp.domain.Meme;
 import com.int20h.task.memeapp.dto.MemeDTO;
-import com.int20h.task.memeapp.dto.MemeDTOBuilder;
 import com.int20h.task.memeapp.dto.MemePairDTO;
+import com.int20h.task.memeapp.provider.MemePairProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,19 +17,18 @@ import static com.int20h.task.memeapp.dto.MemeDTOBuilder.aMemeDTO;
 @RestController
 public class MemePairController extends ApiController {
 
+    private MemePairProvider memePairProvider;
+
+    @Autowired
+    public MemePairController(MemePairProvider memePairProvider) {
+        this.memePairProvider = memePairProvider;
+    }
+
     @RequestMapping(value = "/meme/pair")
     public ResponseEntity<MemePairDTO> getMemePair() {
-        // TODO: return memes from DB
-        MemeDTO memeOne = aMemeDTO()
-                .setId(1L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/aDx30WN_460s.jpg")
-                .build();
-
-        MemeDTO memeTwo = aMemeDTO()
-                .setId(2L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/a9pM3Aj_460s.jpg")
-                .build();
-
+        Pair<Meme, Meme> memePair = memePairProvider.provide();
+        MemeDTO memeOne = aMemeDTO().setMeme(memePair.getFirst()).build();
+        MemeDTO memeTwo = aMemeDTO().setMeme(memePair.getSecond()).build();
         return new ResponseEntity<>(new MemePairDTO(memeOne, memeTwo), HttpStatus.OK);
     }
 }

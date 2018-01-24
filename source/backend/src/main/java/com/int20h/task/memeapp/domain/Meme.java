@@ -17,6 +17,9 @@ public class Meme {
     @Column(name = "rating", nullable = false)
     private double rating;
 
+    protected Meme() {
+    }
+
     public Meme(String imageLink) {
         this.imageLink = imageLink;
     }
