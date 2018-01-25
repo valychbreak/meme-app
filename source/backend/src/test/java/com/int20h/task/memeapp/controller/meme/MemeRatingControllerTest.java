@@ -36,11 +36,11 @@ public class MemeRatingControllerTest extends ControllerTest {
     @Before
     public void setUp() throws Exception {
         // TODO: remove this code and use dbunit (for now, db unit xml file doesn't work for some reason)
-        meme = new Meme("http://test.com/jss.jpg");
+        meme = new Meme("http://test.com/jss.jpg", "Meme name");
         meme.setRating(100D);
         memeRepository.save(meme);
 
-        meme2 = new Meme("http://test.com/jss.jpg");
+        meme2 = new Meme("http://test.com/jss.jpg", "Meme name");
         meme2.setRating(200D);
         memeRepository.save(meme2);
     }

@@ -4,25 +4,35 @@ import com.int20h.task.memeapp.controller.ApiController;
 import com.int20h.task.memeapp.dto.MemeDTO;
 import com.int20h.task.memeapp.dto.PageOrientedData;
 import com.int20h.task.memeapp.dto.PageOrientedDataBuilder;
+import com.int20h.task.memeapp.repository.MemeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.int20h.task.memeapp.dto.MemeDTOBuilder.aMemeDTO;
 
 @RestController
 public class MemeController extends ApiController {
 
+    private MemeRepository memeRepository;
+
+    @Autowired
+    public MemeController(MemeRepository memeRepository) {
+        this.memeRepository = memeRepository;
+    }
+
     @RequestMapping(value = "/meme/all")
     public ResponseEntity<PageOrientedData<MemeDTO>> getAllMemes(
             @RequestParam(value = "p", required = false) Integer page,
             @RequestParam(value = "items", required = false) Integer itemsPerPage
     ) {
-
+        // TODO: return limited amount of items (depending on itemsPerPage)
         if (page == null) {
             page = 1;
         }
@@ -31,41 +41,18 @@ public class MemeController extends ApiController {
             itemsPerPage = 5;
         }
 
-        MemeDTO memeOne = aMemeDTO()
-                .setId(1L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/aDx30WN_460s.jpg")
-                .setRating(9.6)
-                .build();
+        List<MemeDTO> memeDTOList = new ArrayList<>();
 
-        MemeDTO memeTwo = aMemeDTO()
-                .setId(2L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/a9pM3Aj_460s.jpg")
-                .setRating(9.1)
-                .build();
+        memeRepository.findAllByOrderByRatingDesc().forEach(meme -> {
+            memeDTOList.add(aMemeDTO().setMeme(meme).build());
+        });
 
-        MemeDTO memeThree = aMemeDTO()
-                .setId(3L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/a9pM3Aj_460s.jpg")
-                .setRating(8.9)
-                .build();
-
-        MemeDTO memeFour = aMemeDTO()
-                .setId(4L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/a9pM3Aj_460s.jpg")
-                .setRating(8.8)
-                .build();
-
-        MemeDTO memeFive = aMemeDTO()
-                .setId(5L)
-                .setImage("https://img-9gag-fun.9cache.com/photo/a9pM3Aj_460s.jpg")
-                .setRating(3D)
-                .build();
-
+        long totalItems = memeRepository.count();
         PageOrientedData<MemeDTO> memesResult = new PageOrientedDataBuilder<>()
                 .setPage(page)
-                .setTotalItems(15)
+                .setTotalItems(new Long(totalItems).intValue())
                 .setTotalPages(3)
-                .setItems(Arrays.asList(memeOne, memeTwo, memeThree, memeFour, memeFive))
+                .setItems(memeDTOList)
                 .build();
         return new ResponseEntity<>(memesResult, HttpStatus.OK);
     }

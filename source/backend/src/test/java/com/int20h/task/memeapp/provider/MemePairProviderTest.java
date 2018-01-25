@@ -65,6 +65,7 @@ public class MemePairProviderTest {
     private Meme createMeme(String imageLink, long id, double rating) {
         Meme meme = new Meme(imageLink);
         meme.setId(id);
+        meme.setName("Meme name");
         meme.setRating(rating);
         return meme;
     }
