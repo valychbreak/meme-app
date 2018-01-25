@@ -1,5 +1,7 @@
 package com.int20h.task.memeapp.dto;
 
+import com.int20h.task.memeapp.domain.Meme;
+
 public class MemeDTOBuilder {
     private Long id;
     private String image;
@@ -7,6 +9,13 @@ public class MemeDTOBuilder {
 
     public static MemeDTOBuilder aMemeDTO() {
         return new MemeDTOBuilder();
+    }
+
+    public MemeDTOBuilder setMeme(Meme meme) {
+        setId(meme.getId());
+        setImage(meme.getImageLink());
+        setRating(meme.getRating());
+        return this;
     }
 
     public MemeDTOBuilder setId(Long id) {
